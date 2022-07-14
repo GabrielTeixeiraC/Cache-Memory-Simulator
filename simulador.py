@@ -6,7 +6,10 @@ def printCache(validBits, addresses):
     print("=" * 16)
     print("IDX V ** ADDR **")
     for i in range(size):
-        pass
+        if addresses[i] == -1:
+            print(str(i).zfill(3), validBits[i])
+        else:
+            print(str(i).zfill(3), validBits[i], addresses[i])
 
         
 
@@ -43,22 +46,27 @@ for address in fileContent:
     position = int(tag, 2) % numberOfGroups
 
     LRUIndex = 0
+    swapped = False
 
     for i in range(groupSize):
         line = position * groupSize + i
         if validBits[line] == 0:
             validBits[line] = 1
             addresses[line] = hexIndex
+            swapped = True
             timestamps[line] = 0
             break
         else:
             if addresses[line] == hexIndex:
                 timestamps[line] = 0
+                swapped = True
                 break
             else:
                 LRUIndex = max(LRUIndex, i)
-    if (LRUIndex > 0):
+    if (not swapped):
         addresses[LRUIndex] = hexIndex
         timestamps[LRUIndex] = 0    
+
+    printCache(validBits, addresses)
 
 print()
