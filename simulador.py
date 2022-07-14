@@ -1,10 +1,64 @@
 import sys
+import math
 
-s1, s2, s3 = sys.argv[1], sys.argv[2], sys.argv[3]
-a, b, c = float(s1), float(s2), float(s3)
+def printCache(validBits, addresses):
+    size = len(addresses)
+    print("=" * 16)
+    print("IDX V ** ADDR **")
+    for i in range(size):
+        pass
 
-file = open('teste.txt', 'r')
+        
 
-fileContent = file.read()
+cacheSize = int(sys.argv[1])
+cacheLineSize = int(sys.argv[2])
+groupSize = int(sys.argv[3])
+filename = sys.argv[4]
 
-print(fileContent)
+offsetSize = int(math.log(cacheLineSize, 2))
+
+numberOfLines = cacheSize // cacheLineSize
+numberOfGroups = numberOfLines // groupSize
+
+tagSize = int(math.log(numberOfGroups, 2))
+
+indexSize = 32 - tagSize - offsetSize
+
+with open(filename, 'r') as file:
+    fileContent = file.read().split('\n')
+
+validBits = [0 for i in range(numberOfLines)]
+addresses = [-1 for i in range(numberOfLines)]
+timestamps = [0 for i in range(numberOfLines)]
+
+for address in fileContent:
+    number = int(address, 16)
+    binaryNumber = bin(number)[2:].zfill(32)
+
+    index = binaryNumber[:indexSize].zfill(32)
+    offset = binaryNumber[-offsetSize:]
+    tag = binaryNumber[indexSize:-offsetSize].zfill(32)
+    hexIndex = '0x' + hex(int(index, 2))[2:].zfill(8).upper()
+
+    position = int(tag, 2) % numberOfGroups
+
+    LRUIndex = 0
+
+    for i in range(groupSize):
+        line = position * groupSize + i
+        if validBits[line] == 0:
+            validBits[line] = 1
+            addresses[line] = hexIndex
+            timestamps[line] = 0
+            break
+        else:
+            if addresses[line] == hexIndex:
+                timestamps[line] = 0
+                break
+            else:
+                LRUIndex = max(LRUIndex, i)
+    if (LRUIndex > 0):
+        addresses[LRUIndex] = hexIndex
+        timestamps[LRUIndex] = 0    
+
+print()
