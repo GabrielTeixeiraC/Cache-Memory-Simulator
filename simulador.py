@@ -11,8 +11,6 @@ def printCache(validBits, addresses):
         else:
             print(str(i).zfill(3), validBits[i], addresses[i])
 
-        
-
 cacheSize = int(sys.argv[1])
 cacheLineSize = int(sys.argv[2])
 groupSize = int(sys.argv[3])
@@ -35,6 +33,8 @@ addresses = [-1 for i in range(numberOfLines)]
 timestamps = [0 for i in range(numberOfLines)]
 
 for address in fileContent:
+    if (address == ''):
+        continue
     number = int(address, 16)
     binaryNumber = bin(number)[2:].zfill(32)
 
@@ -68,5 +68,3 @@ for address in fileContent:
         timestamps[LRUIndex] = 0    
 
     printCache(validBits, addresses)
-
-print()
