@@ -39,7 +39,6 @@ for address in fileContent:
     binaryNumber = bin(number)[2:].zfill(32)
 
     index = binaryNumber[:indexSize].zfill(32)
-    offset = binaryNumber[-offsetSize:]
     tag = binaryNumber[indexSize:-offsetSize].zfill(32)
     hexIndex = '0x' + hex(int(index, 2))[2:].zfill(8).upper()
 
