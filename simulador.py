@@ -1,6 +1,10 @@
 import sys
 import math
 
+def updateTimestamps(timestamps):
+    for i in range(len(timestamps)):
+        timestamps[i] += 1
+
 def printCache(validBits, addresses):
     size = len(addresses)
     print("=" * 16)
@@ -44,7 +48,7 @@ for address in fileContent:
 
     position = int(tag, 2) % numberOfGroups
 
-    LRUIndex = 0
+    LRUIndex = position * groupSize
     swapped = False
 
     for i in range(groupSize):
@@ -61,9 +65,12 @@ for address in fileContent:
                 swapped = True
                 break
             else:
-                LRUIndex = max(LRUIndex, i)
+                if timestamps[line] > timestamps[LRUIndex]:
+                    LRUIndex = line
     if (not swapped):
         addresses[LRUIndex] = hexIndex
         timestamps[LRUIndex] = 0    
+    
+    updateTimestamps(timestamps)
 
     printCache(validBits, addresses)
