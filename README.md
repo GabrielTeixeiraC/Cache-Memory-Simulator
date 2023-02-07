@@ -1,5 +1,13 @@
 # Cache Memory Simulator
 
+This program was developed by:
+
+[Gabriel Lima Barros](https://github.com/GabrielLimab)
+
+[Gabriel Teixeira Carvalho](https://github.com/GabrielTeixeiraC)
+
+[Thiago Pádua de Carvalho](https://github.com/paduathiago)
+
 To run the simulator, create a .txt file with the memory addresses and pass the name of this file in the command line along with the other arguments when calling the program.
 The passing of parameters follows the format below:
 
